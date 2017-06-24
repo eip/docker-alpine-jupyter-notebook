@@ -14,7 +14,7 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 	&& export CC=/usr/bin/clang CXX=/usr/bin/clang++ \
 	&& ln -s /usr/include/locale.h /usr/include/xlocale.h \
 	&& mkdir -p /opt/tmp && cd /opt/tmp \
-	&& pip download -d /opt/tmp numpy \
+	&& pip3 download -d /opt/tmp numpy \
 	&& unzip -q numpy*.zip \
 	&& cd numpy* && echo "Building numpy..." \
 	&& echo -e "[ALL]\nlibrary_dirs = /usr/lib\ninclude_dirs = /usr/include\n[atlas]\natlas_libs = openblas\nlibraries = openblas\n[openblas]\nlibraries = openblas\nlibrary_dirs = /usr/lib\ninclude_dirs = /usr/include\n" > site.cfg \
@@ -40,15 +40,16 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 	&& make &> /dev/null && make install &> /dev/null && echo "Successfully installed opencv" \
 	&& pip3 install --upgrade matplotlib jupyter ipywidgets \
 	&& jupyter nbextension enable --py widgetsnbextension \
+	&& echo "c.NotebookApp.token = ''" > /root/.jupyter/jupyter_notebook_config.py \
 	&& cd /opt && rm -r /opt/tmp && mkdir -p /opt/notebook \
 	&& unset CC CXX \
 	&& apk del .build-deps \
 	&& rm -r /root/.cache \
-	&& find /usr/lib/python3.5/ -type d -name tests -depth -exec rm -rf {} \; \
-	&& find /usr/lib/python3.5/ -type d -name test -depth -exec rm -rf {} \; \
-	&& find /usr/lib/python3.5/ -name __pycache__ -depth -exec rm -rf {} \;
+	&& find /usr/lib/python3.6/ -type d -name tests -depth -exec rm -rf {} \; \
+	&& find /usr/lib/python3.6/ -type d -name test -depth -exec rm -rf {} \; \
+	&& find /usr/lib/python3.6/ -name __pycache__ -depth -exec rm -rf {} \;
 
 EXPOSE 8888
 WORKDIR /opt/notebook
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0"]
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
