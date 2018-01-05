@@ -20,8 +20,8 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 	&& echo -e "[ALL]\nlibrary_dirs = /usr/lib\ninclude_dirs = /usr/include\n[atlas]\natlas_libs = openblas\nlibraries = openblas\n[openblas]\nlibraries = openblas\nlibrary_dirs = /usr/lib\ninclude_dirs = /usr/include\n" > site.cfg \
 	&& python3 setup.py build -j 4 install &> /dev/null && echo "Successfully installed numpy" \
 	&& cd /opt/tmp \
-	&& echo "Downloading opencv" && wget --quiet https://github.com/opencv/opencv/archive/3.3.1.zip \
-	&& unzip -q 3.3.1.zip \
+	&& echo "Downloading opencv" && wget --quiet https://github.com/opencv/opencv/archive/3.4.0.zip \
+	&& unzip -q 3.4.0.zip \
 	&& cd opencv* \
 	&& mkdir build && cd build && echo "Building opencv..." \
 	&& cmake -D CMAKE_BUILD_TYPE=RELEASE \
