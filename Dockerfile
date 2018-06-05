@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 MAINTAINER eip
-# docker run -d --name alpine-jupyter-01 -p 8888:8888 -v [host-src]:/opt/notebook eipdev/alpine-jupyter-notebook
+# docker container run -d --name jupyter-lab -p 8888:8888 -v "$PWD":/opt/notebook eipdev/alpine-jupyter-lab
 
 ENV LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8 LANG=C.UTF-8
 
@@ -38,7 +38,7 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 		-D BUILD_PERF_TESTS=NO \
 		-D BUILD_TESTS=NO .. &> /dev/null \
 	&& make &> /dev/null && make install &> /dev/null && echo "Successfully installed opencv" \
-	&& pip3 install --upgrade matplotlib jupyter ipywidgets \
+	&& pip3 install --upgrade matplotlib jupyterlab ipywidgets \
 	&& jupyter nbextension enable --py widgetsnbextension \
 	&& echo "c.NotebookApp.token = ''" > /root/.jupyter/jupyter_notebook_config.py \
 	&& cd /opt && rm -r /opt/tmp && mkdir -p /opt/notebook \
@@ -52,4 +52,4 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 EXPOSE 8888
 WORKDIR /opt/notebook
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
