@@ -10,7 +10,7 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 	&& apk add --no-cache tini python3 libstdc++ openblas freetype wget ca-certificates \
 	&& python3 -m ensurepip && rm -r /usr/lib/python*/ensurepip \
 	&& pip3 install --upgrade pip setuptools \
-	&& apk add --no-cache --virtual .build-deps@testing python3-dev make cmake clang clang-dev g++ linux-headers libtbb@testing libtbb-dev@testing openblas-dev freetype-dev \
+	&& apk add --no-cache --virtual .build-deps@testing python3-dev make cmake clang clang-dev g++ linux-headers libtbb libtbb-dev openblas-dev freetype-dev \
 	&& export CC=/usr/bin/clang CXX=/usr/bin/clang++ \
 	&& ln -s /usr/include/locale.h /usr/include/xlocale.h \
 	&& mkdir -p /opt/tmp && cd /opt/tmp \
@@ -20,8 +20,8 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 	&& echo -e "[ALL]\nlibrary_dirs = /usr/lib\ninclude_dirs = /usr/include\n[atlas]\natlas_libs = openblas\nlibraries = openblas\n[openblas]\nlibraries = openblas\nlibrary_dirs = /usr/lib\ninclude_dirs = /usr/include\n" > site.cfg \
 	&& python3 setup.py build -j 4 install &> /dev/null && echo "Successfully installed numpy" \
 	&& cd /opt/tmp \
-	&& echo "Downloading opencv" && wget --quiet https://github.com/opencv/opencv/archive/3.4.1.zip \
-	&& unzip -q 3.4.1.zip \
+	&& echo "Downloading opencv" && wget --quiet https://github.com/opencv/opencv/archive/3.4.3.zip \
+	&& unzip -q 3.4.3.zip \
 	&& cd opencv* \
 	&& mkdir build && cd build && echo "Building opencv..." \
 	&& cmake -D CMAKE_BUILD_TYPE=RELEASE \
